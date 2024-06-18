@@ -9,6 +9,7 @@ import { BulletManager } from '../Entity/Bullet/BulletManager';
 import { ObjectPoolManager } from '../Global/ObjectPoolManager';
 import { NetworkManager } from '../Global/NetworkManager';
 import EventManager from '../Global/EventManager';
+import { IMsgServerSync } from '../Common/Msg';
 const { ccclass, property } = _decorator;
 
 @ccclass('BattleManager')
@@ -28,12 +29,12 @@ export class BattleManager extends Component {
         this.clearGame();
         await Promise.all([this.connectSever(), this.londRes()]);
         // this.initGame();
-        const {success,error,res} = await NetworkManager.Instance.callApi(ApiMsgEnum.ApiPlayerJoin, "我是COCOS");
-        if(!success){
-            console.log(error);
-            return ;
-        }
-        console.log("res!",res);
+        // const {success,error,res} = await NetworkManager.Instance.callApi(ApiMsgEnum.ApiPlayerJoin, "我是COCOS");
+        // if(!success){
+        //     console.log(error);
+        //     return ;
+        // }
+        // console.log("res!",res);
         // NetworkManager.Instance.sendMsg("nihao,wo shi cocos creator");
         // NetworkManager.Instance.listenMsg("haha",(data)=>{
         //     console.log("listenMsg",data);
@@ -162,7 +163,7 @@ export class BattleManager extends Component {
         NetworkManager.Instance.sendMsg(ApiMsgEnum.MsgClientSync, msg);
     }
     //类型以后会补全
-    handleServerSync({ inputs }: any) {
+    handleServerSync({ inputs }: IMsgServerSync) {
         for (const input of inputs) {
             DataManager.Instance.applyInput(input);
         }

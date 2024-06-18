@@ -1,5 +1,6 @@
 import { _decorator, resources, Asset } from "cc";
 import Singleton from "../Base/Singleton";
+import { IModel } from "../Common";
 
 interface IItem {
     cb: Function;
@@ -7,9 +8,10 @@ interface IItem {
 }
 
 //接口,加了?之后代表这个值可选
-interface ICallApiRet {
+//增加泛型
+interface ICallApiRet<T> {
     success: boolean,
-    res?: any,
+    res?: T,
     error?: Error,
 }
 
@@ -67,34 +69,36 @@ export class NetworkManager extends Singleton {
 
     //通过Promise来封装发布订阅的模式
     //在BattleManager里调用这个方法
-    callApi(name: string, data): Promise<ICallApiRet> {
+    //为其增加一个泛型,keyof 拿到枚举，这样T就是ApiMagEnum类型,data 拼上T类型之后得到api具体的对象req,res
+    callApi<T extends keyof IModel["api"]>(name: T, data: IModel["api"][T]["req"]): Promise<ICallApiRet<IModel["api"][T]["res"]>> {
         return new Promise((resolve) => {
             try {
                 const timer = setTimeout(() => {
                     resolve({ success: false, error: new Error("Time out") });   //防止超时
-                    this.unlistenMsg(name, cb, null);
+                    this.unlistenMsg(name as any, cb, null);
                 }, 5000)
                 const cb = (res) => {
                     resolve(res);
                     clearTimeout(timer);
-                    this.unlistenMsg(name, cb, null);
+                    this.unlistenMsg(name as any, cb, null);
                 }
-                this.listenMsg(name, cb, null);
-                this.sendMsg(name, data);
+                this.listenMsg(name as any, cb, null);
+                this.sendMsg(name as any, data);
             } catch (error) {
                 resolve({ success: false, error });
             }
         })
     }
 
-    sendMsg(name: string, data) {
+    //Msg并没有响应请求之分
+    sendMsg<T extends keyof IModel["msg"]>(name: T, data: IModel["msg"][T]) {
         const msg = {
             name, data,
         }
         this.ws.send(JSON.stringify(msg));
     }
 
-    listenMsg(name: string, cb: Function, ctx: unknown) {
+    listenMsg<T extends keyof IModel["msg"]>(name: T, cb: (args: IModel["msg"][T]) => void, ctx: unknown) {
         if (this.map.has(name)) {
             this.map.get(name).push({ cb, ctx });
         } else {
@@ -102,7 +106,7 @@ export class NetworkManager extends Singleton {
         }
     }
 
-    unlistenMsg(name: string, cb: Function, ctx: unknown) {
+    unlistenMsg<T extends keyof IModel["msg"]>(name: T, cb: (args: IModel["msg"][T]) => void, ctx: unknown) {
         if (this.map.has(name)) {
             const index = this.map.get(name).findIndex((i) => cb === i.cb && ctx === i.ctx);
             index > -1 && this.map.get(name).splice(index, 1);

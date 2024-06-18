@@ -1,6 +1,6 @@
 import { WebSocketServer,WebSocket } from "ws";
 import { Connection } from "./Connection";
-import { ApiMsgEnum } from "../Common";
+import { ApiMsgEnum, IModel } from "../Common";
 import { EventEmitter } from "stream";
 
 export class MyServer extends EventEmitter{
@@ -36,7 +36,7 @@ export class MyServer extends EventEmitter{
 
     //ApiMsgEnum即用在API服务，也用在MSG服务
     //其调用在index入口文件调用
-    setApi(name:ApiMsgEnum,cb:Function){
+    setApi<T extends keyof IModel["api"]>(name:T,cb:(connection:Connection,args:IModel["api"][T]["req"])=>void){
         this.apiMap.set(name,cb);
     }
 }

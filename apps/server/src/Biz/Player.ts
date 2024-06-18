@@ -3,12 +3,12 @@ import { Connection } from "../Core";
 export class Player {
     id: number
     nickname: string
-    conncetion: Connection
+    connection: Connection
     rid: number //房间号
 
-    constructor({id,nickname,conncetion} : Pick<Player,'id' | 'nickname' | 'conncetion'>){
+    constructor({id,nickname,connection} : Pick<Player,'id' | 'nickname' | 'connection'>){
         this.id = id;
-        this.conncetion = conncetion;
+        this.connection = connection;
         this.nickname = nickname;
     }
 }

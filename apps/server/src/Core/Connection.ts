@@ -2,6 +2,7 @@ import { EventEmitter } from "stream";
 import { MyServer } from "./MyServer";
 import { WebSocketServer, WebSocket } from "ws";
 import { Console } from "console";
+import { IModel } from "../Common";
 
 interface IItem {
     cb: Function;
@@ -13,7 +14,7 @@ export class Connection extends EventEmitter {
     private msgMap: Map<string, Array<IItem>> = new Map();
 
     // playerId属于业务逻辑，不应该写在核心代码中
-    // playerId:number;
+    // playerId:number; solove:在index/declare module
 
 
     constructor(private server: MyServer, private ws: WebSocket) {
@@ -62,14 +63,14 @@ export class Connection extends EventEmitter {
     }
 
 
-    sendMsg(name: string, data) {
+    sendMsg<T extends keyof IModel["msg"]>(name: T, data: IModel["msg"][T]) {
         const msg = {
             name, data,
         }
         this.ws.send(JSON.stringify(msg));
     }
 
-    listenMsg(name: string, cb: Function, ctx: unknown) {
+    listenMsg<T extends keyof IModel["msg"]>(name: T, cb: (args: IModel["msg"][T]) => void, ctx: unknown) {
         if (this.msgMap.has(name)) {
             this.msgMap.get(name).push({ cb, ctx });
         } else {
@@ -77,7 +78,7 @@ export class Connection extends EventEmitter {
         }
     }
 
-    unlistenMsg(name: string, cb: Function, ctx: unknown) {
+    unlistenMsg<T extends keyof IModel["msg"]>(name: T, cb: (args: IModel["msg"][T]) => void, ctx: unknown) {
         if (this.msgMap.has(name)) {
             const index = this.msgMap.get(name).findIndex((i) => cb === i.cb && ctx === i.ctx);
             index > -1 && this.msgMap.get(name).splice(index, 1);

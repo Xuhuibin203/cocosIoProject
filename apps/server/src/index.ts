@@ -1,5 +1,5 @@
 import { log } from "console";
-import { ApiMsgEnum } from "./Common";
+import { ApiMsgEnum, IApiPlayerJoinReq } from "./Common";
 import { Connection, MyServer } from "./Core";
 import { symlinkCommon } from "./Utils";
 import { WebSocketServer } from "ws";
@@ -29,7 +29,7 @@ server.on("disconnection", (connection: Connection) => {
     console.log("PlayerManager.Instance.palyers.size", PlayerManager.Instance.palyers.size);
 })
 
-server.setApi(ApiMsgEnum.ApiPlayerJoin, (connection: Connection, data: any) => {
+server.setApi(ApiMsgEnum.ApiPlayerJoin, (connection: Connection, data: IApiPlayerJoinReq) => {
     // return data+"我是服务端，我知道了";
     const { nickname } = data;
     const player = PlayerManager.Instance.createPlayer({ nickname, connection });
