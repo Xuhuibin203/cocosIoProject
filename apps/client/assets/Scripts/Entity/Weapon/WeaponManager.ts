@@ -46,8 +46,21 @@ export class WeaponManager extends EntityManager {
 
         const direction = new Vec2(pointWorldPos.x - anchorWorldPos.x, pointWorldPos.y - anchorWorldPos.y).normalize();
 
-        DataManager.Instance.applyInput({
-            //common/Enum //输入封装
+        // DataManager.Instance.applyInput({
+        //     //common/Enum //输入封装
+        //     type: InputTypeEnum.WeaponShoot,
+        //     owner: this.owner,
+        //     position: {
+        //         x: pointStagePos.x,
+        //         y: pointStagePos.y,
+        //     },
+        //     direction: {
+        //         x: direction.x,
+        //         y: direction.y,
+        //     },
+        // })
+        //将其封装至事件中心
+        EventManager.Instance.emit(EventEnum.ClientSync,{
             type: InputTypeEnum.WeaponShoot,
             owner: this.owner,
             position: {
@@ -58,7 +71,7 @@ export class WeaponManager extends EntityManager {
                 x: direction.x,
                 y: direction.y,
             },
-        })
+        });
         console.log(DataManager.Instance.state.bullets)
     }
 }

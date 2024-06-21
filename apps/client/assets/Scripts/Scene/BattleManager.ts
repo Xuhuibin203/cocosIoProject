@@ -97,13 +97,15 @@ export class BattleManager extends Component {
         this.render();
         this.tick(dt);
     }
+
+    //当有多个客户端的时候，给每个客户端都建立时间流逝的话就不对了，应当把时间流逝的构造在服务端中
     tick(dt) {
         this.tickActor(dt);
 
-        DataManager.Instance.applyInput({
-            type: InputTypeEnum.TimePast,
-            dt,
-        })
+        // DataManager.Instance.applyInput({
+        //     type: InputTypeEnum.TimePast,
+        //     dt,
+        // })
     }
     tickActor(dt) {
         for (const data of DataManager.Instance.state.actors) {
