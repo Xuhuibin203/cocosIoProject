@@ -28,7 +28,7 @@ export class BattleManager extends Component {
     async start() {
         this.clearGame();
         await Promise.all([this.connectSever(), this.londRes()]);
-        // this.initGame();
+        this.initGame();
         // const {success,error,res} = await NetworkManager.Instance.callApi(ApiMsgEnum.ApiPlayerJoin, "我是COCOS");
         // if(!success){
         //     console.log(error);
@@ -162,7 +162,7 @@ export class BattleManager extends Component {
         }
         NetworkManager.Instance.sendMsg(ApiMsgEnum.MsgClientSync, msg);
     }
-    //类型以后会补全
+    //类型以后会补全(已补全)
     handleServerSync({ inputs }: IMsgServerSync) {
         for (const input of inputs) {
             DataManager.Instance.applyInput(input);

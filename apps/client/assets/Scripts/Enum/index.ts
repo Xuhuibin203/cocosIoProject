@@ -14,6 +14,7 @@ export enum EventEnum {
 	ExplosionBron = "ExplosionBron",
 	BolletBron = "BolletBron",
 	ClientSync = "ClientSync",
+	RoomJoin = "RoomJoin",
 }
 
 export enum PrefabPathEnum {
@@ -39,7 +40,10 @@ export enum EntityStateEnum {
 	Attack = "Attack",
 }
 
+//跳转的场景
 export enum SceneEnum {
 	Login = "Login",
+	Hall = "Hall",
 	Battle = "Battle",
+	Room = "Room",
 }

@@ -10,7 +10,7 @@ export class LoginManager extends Component {
     input: EditBox;
     onLoad() {
         this.input = this.getComponentInChildren(EditBox);
-        director.preloadScene(SceneEnum.Battle);    //场景预加载 
+        director.preloadScene(SceneEnum.Hall);    //场景预加载 
     }
 
     async start() {
@@ -39,7 +39,7 @@ export class LoginManager extends Component {
         console.log("res!", res);
 
         //登录成功后进行跳转
-        director.loadScene(SceneEnum.Battle);
+        director.loadScene(SceneEnum.Hall);
     }
 
 }

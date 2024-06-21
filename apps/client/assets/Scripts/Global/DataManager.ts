@@ -1,6 +1,6 @@
 import { Prefab, SpriteFrame, Node, ForwardPipelineBuilder } from "cc";
 import Singleton from "../Base/Singleton";
-import { EntityTypeEnum, IActorMove, IBullet, IClienInput, IState, InputTypeEnum } from "../Common";
+import { EntityTypeEnum, IActorMove, IBullet, IClienInput, IRoom, IState, InputTypeEnum } from "../Common";
 import { ActorManager } from "../Entity/Actor/ActorManager";
 import { JoyStickManager } from "../UI/JoyStickManager";
 import { WeaponManager } from "../Entity/Weapon/WeaponManager";
@@ -27,6 +27,7 @@ export default class DataManager extends Singleton {
 
 	myPlayerId = 1;
 	frameId = 1;
+	roomInfo: IRoom;	//存储加入房间的信息
 
 	stage: Node;
 	jm: JoyStickManager;
@@ -37,24 +38,25 @@ export default class DataManager extends Singleton {
 
 	state: IState = {
 		actors: [
-			{
-				id: 1,
-				hp: 100,
-				type: EntityTypeEnum.Actor1,	//角色渲染
-				weaponType: EntityTypeEnum.Weapon1,	//武器渲染
-				bulletType: EntityTypeEnum.Bullet2,	//子弹渲染
-				position: { x: -150, y: -150 },
-				direction: { x: 1, y: 0 }
-			},
-			{
-				id: 2,
-				hp: 100,
-				type: EntityTypeEnum.Actor1,	//角色渲染
-				weaponType: EntityTypeEnum.Weapon1,	//武器渲染
-				bulletType: EntityTypeEnum.Bullet2,	//子弹渲染
-				position: { x: 150, y: 150 },
-				direction: { x: -1, y: 0 }
-			},
+			//注释完前端数据为空，都由后端渲染Biz/Room
+			// {
+			// 	id: 1,
+			// 	hp: 100,
+			// 	type: EntityTypeEnum.Actor1,	//角色渲染
+			// 	weaponType: EntityTypeEnum.Weapon1,	//武器渲染
+			// 	bulletType: EntityTypeEnum.Bullet2,	//子弹渲染
+			// 	position: { x: -150, y: -150 },
+			// 	direction: { x: 1, y: 0 }
+			// },
+			// {
+			// 	id: 2,
+			// 	hp: 100,
+			// 	type: EntityTypeEnum.Actor1,	//角色渲染
+			// 	weaponType: EntityTypeEnum.Weapon1,	//武器渲染
+			// 	bulletType: EntityTypeEnum.Bullet2,	//子弹渲染
+			// 	position: { x: 150, y: 150 },
+			// 	direction: { x: -1, y: 0 }
+			// },
 		],
 		bullets: [],
 		nextBulletId: 1,
